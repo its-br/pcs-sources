@@ -1,0 +1,663 @@
+openapi: 3.0.3
+info:
+  title: PCSVoyageAPI
+  description: Rest API for manage Voyage
+  contact:
+    email: contato@its.org.br
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.0.1
+servers:
+- url: https://pcs-api.its.org.br/api/voyage/0.0.1
+  description: PCS Voyage API
+paths:
+  /voyage-creation:
+    post:
+      summary: Create a voyage item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoyageCreation'
+        required: true
+      responses:
+        '201':
+          description: Item created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ReceiptID:
+                    type: integer
+                    description: Receipt Number
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /voyage-acceptance:
+    post:
+      summary: Updates the trip with the information of acceptance or refusal of the
+        mooring or tug operation.
+      parameters:
+        - name: PCSAuthorization
+          in: header
+          description: Header to provide credentials that authenticate an actor.
+          required: true
+          schema:
+            type: string
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjbnBqIjoiNjQ5Njk4NjkwMDAxMjEiLCJ1c2VyX2FnZW50IjoiMjc5MjgyMDIwMDAxNTQifQ.4h9yVer_GDtpLQbF21FSoQ45nl32j_VwV2mYp0o6HAE
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceProvidersAcceptance'
+        required: true
+      responses:
+        '201':
+          description: Item created
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /voyage/status/{receiptID}:
+    get:
+      summary: get voyage status by receipt ID
+      operationId: getVoyageStatus
+      parameters:
+      - name: receiptID
+        in: path
+        description: Receipt id that needs to be fetched
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoyageCreationStatus'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/VoyageCreationStatus'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Receipt ID not found
+  /voyage/{voyageID}:
+    get:
+      summary: Get voyage by PCSVoyageID
+      operationId: getVoyage
+      parameters:
+      - name: voyageID
+        in: path
+        description: voyage id that needs to be fetched
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PCSVoyageInfo'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PCSVoyageInfo'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Voyage not found
+    delete:
+      summary: Delete Voyage
+      operationId: deleteVoyage
+      parameters:
+      - name: voyageID
+        in: path
+        description: ID of voyage that needs to be deleted
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Voyage not found
+    patch:
+      summary: Updated Voyage Informations
+      operationId: updateVoyage
+      parameters:
+      - name: voyageID
+        in: path
+        description: ID of voyage that needs to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Updated Voyage object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoyageUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Voyage not found
+  /voyages:
+    get:
+      summary: get a list of voyages
+      operationId: getListVoyages
+      parameters:
+      - name: startDate
+        in: query
+        description: Start date for consultation
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: dateRange
+        in: query
+        description: Consultation period
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PCSVoyageInfo'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PCSVoyageInfo'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /voyage-acceptance/{IDMethod}/{ID}:
+    patch:
+      summary: Through this interface it is possible to update the acceptance or denial
+        of responsibility for a trip
+      parameters:
+      - name: PCSAuthorization
+        in: header
+        description: Header to provide credentials that authenticate an actor.
+        required: true
+        schema:
+          type: string
+        example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjbnBqIjoiNjQ5Njk4NjkwMDAxMjEiLCJ1c2VyX2FnZW50IjoiMjc5MjgyMDIwMDAxNTQifQ.4h9yVer_GDtpLQbF21FSoQ45nl32j_VwV2mYp0o6HAE
+      - name: IDMethod
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - PCSVoyageID
+          - receiptID
+      - name: ID
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Updated responsabilities
+        content:
+          application/json:
+            schema:
+              required:
+              - acceptance
+              type: object
+              properties:
+                acceptance:
+                  type: string
+                  description: Field where the mooring company or tugboat must express
+                    acceptance or refusal of the operation informed by the shipping
+                    agent, related to a trip (PCSVoyageID)
+                  enum:
+                  - Accepted
+                  - Refused
+                responsabilityCODE:
+                  type: string
+                  description: 000 code means all responsability
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: ID not found
+  /voyages-acceptance:
+    get:
+      summary: get a list of voyages and acceptance status
+      parameters:
+      - name: PCSAuthorization
+        in: header
+        description: Header to provide credentials that authenticate an actor.
+        required: true
+        schema:
+          type: string
+        example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjbnBqIjoiNjQ5Njk4NjkwMDAxMjEiLCJ1c2VyX2FnZW50IjoiMjc5MjgyMDIwMDAxNTQifQ.4h9yVer_GDtpLQbF21FSoQ45nl32j_VwV2mYp0o6HAE
+      - name: startDate
+        in: query
+        description: Start date for consultation
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: dateRange
+        in: query
+        description: Consultation period
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceProvidersAcceptance'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServiceProvidersAcceptance'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: error message code
+        message:
+          type: string
+          description: error message description
+    PCSVoyageInfo:
+      required:
+      - carrierDetails
+      - carrierVoyageDetails
+      - vesselOperatorResponse
+      type: object
+      properties:
+        carrierDetails:
+          $ref: '#/components/schemas/CarrierDetails'
+        carrierVoyageDetails:
+          $ref: '#/components/schemas/CarrierVoyageDetails'
+        transportCall:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransportCall'
+        otherMaritimeAgents:
+          type: array
+          items:
+            $ref: '#/components/schemas/OtherMaritimeAgent'
+        maritimeAgentCallBack:
+          $ref: '#/components/schemas/MaritimeAgentCallBack'
+        vesselOperatorResponse:
+          $ref: '#/components/schemas/PCSVoyageStatus'
+    PCSVoyageStatus:
+      required:
+      - subscriptionID
+      - vesselOperatorCarrierCode
+      - vesselOperatorCarrierCodeListProvider
+      - voyageGeneralStatus
+      type: object
+      properties:
+        subscriptionID:
+          type: string
+          description: The application for which this event is published
+        vesselOperatorCarrierCode:
+          type: string
+          description: vessel operator identifier publishing the event
+        vesselOperatorCarrierCodeListProvider:
+          type: integer
+          description: The parameter identifies the codelist provider used for operator
+            and partner operator codes. Possible values are:/ SMDG or NMFTA
+        vesselPartnerCarrierCode:
+          type: string
+          description: The identifier of the ship's partner for which the current
+            message is intended. This field allows specifying multiple values separated
+            by commas if there is more than one ship partner involved.
+        vesselPartnerCarrierCodeListProvider:
+          type: string
+          description: The parameter identifies the codelist provider used for the
+            vessel operator and partner carrier codes. Possible values are:/ SMDG
+            or NMFTA
+        startDate:
+          type: string
+          description: Start date of receiving the update data set.
+        rangeDate:
+          type: integer
+          description: The period for which the roster information is sent to the
+            requester.
+        voyageGeneralStatus:
+          $ref: '#/components/schemas/VoyageGeneralStatus'
+    ServiceProvidersAcceptance:
+      required:
+      - IDMethod
+      - acceptance
+      type: object
+      properties:
+        IDMethod:
+          type: object
+          properties:
+            PCSvoyageID:
+              type: string
+              description: Voyage Number generated by PCS
+            receiptID:
+              type: string
+              description: Receipt code made available to the applicant for future
+                status consultation at the time of trip creation
+          oneOf:
+          - required:
+            - PCSvoyageID
+          - required:
+            - receiptID
+        acceptance:
+          type: string
+          description: Field where the mooring company or tugboat must express acceptance
+            or refusal of the operation informed by the shipping agent, related to
+            a trip (PCSVoyageID)
+          enum:
+          - Accepted
+          - Refused
+        responsabilityCODE:
+          type: string
+          description: 000 code means all responsability
+    VoyageCreationStatus:
+      required:
+      - statusCodeAgent
+      - statusCodeIMO
+      - statusCodePublicSystems
+      - statusCodeSubscription
+      - statusCodeTerminal
+      type: object
+      properties:
+        statusCodeIMO:
+          maxLength: 4
+          minLength: 4
+          type: string
+          description: Código de status da etapa de validação dos dados da viagem
+            na base de dados da IMO
+        statusCodePublicSystems:
+          maxLength: 4
+          minLength: 4
+          type: string
+          description: Código de status da etapa de validação dos dados da viagem
+            junto dos sistemas públicos
+        statusCodeAgent:
+          maxLength: 4
+          minLength: 4
+          type: string
+          description: Código de status da etapa de validação dos dados da viagem
+            junto de agentes marítimos secundários
+        statusCodeTerminal:
+          maxLength: 4
+          minLength: 4
+          type: string
+          description: Código de status da etapa de validação dos dados da viagem
+            junto do terminal portuário
+        statusCodeSubscription:
+          maxLength: 4
+          minLength: 4
+          type: string
+          description: Código de status da etapa de subscrição no sistema do armador
+        PCSVoyageID:
+          maxLength: 20
+          minLength: 20
+          type: string
+          description: Número da viagem gerado pelo PCS. Esse dado só será apresentado
+            caso a viagem tenha sido gerada com sucesso
+    VoyageCreation:
+      required:
+      - carrierDetails
+      - carrierVoyageDetails
+      type: object
+      properties:
+        carrierDetails:
+          $ref: '#/components/schemas/CarrierDetails'
+        carrierVoyageDetails:
+          $ref: '#/components/schemas/CarrierVoyageDetails'
+        transportCall:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransportCall'
+        otherMaritimeAgents:
+          type: array
+          items:
+            $ref: '#/components/schemas/OtherMaritimeAgent'
+        maritimeAgentCallBack:
+          $ref: '#/components/schemas/MaritimeAgentCallBack'
+    VoyageUpdate:
+      type: object
+      properties:
+        carrierVoyageDetails:
+          $ref: '#/components/schemas/CarrierVoyageDetails'
+        transportCall:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransportCall'
+        otherMaritimeAgents:
+          type: array
+          items:
+            $ref: '#/components/schemas/OtherMaritimeAgent'
+        maritimeAgentCallBack:
+          $ref: '#/components/schemas/MaritimeAgentCallBack'
+    CarrierDetails:
+      required:
+      - carrierCode
+      - listProvider
+      type: object
+      properties:
+        listProvider:
+          type: string
+          description: id of provider of cadastry code for carrier (SMDG or NMFTA)
+        carrierCode:
+          type: string
+          description: code of carrier
+    CarrierVoyageDetails:
+      required:
+      - UNLocationCode
+      - carrierVoyageNumber
+      - vesselIMO
+      type: object
+      properties:
+        carrierVoyageNumber:
+          type: string
+          description: Voyage Id as DCSA Data Model
+        vesselIMO:
+          type: string
+          description: IMO code of ship as Lloyd's Register.
+        UNLocationCode:
+          type: string
+          description: city of destiny port code as UN/CEFACT
+    TransportCall:
+      required:
+      - portFacilityCnpj
+      - portFacilityTypeDcsaCode
+      type: object
+      properties:
+        portFacilityTypeDcsaCode:
+          type: string
+          description: Code defined by DCSA
+        portFacilityCnpj:
+          type: string
+          description: CNPJ of port facility
+        mooringOperatorCnpj:
+          type: string
+          description: CNPJ of responsible for mooring
+        tugboatCompanyCnpj:
+          type: string
+          description: CNPJ of Tugboat Operator
+    OtherMaritimeAgent:
+      required:
+      - maritimeAgentCnpj
+      - responsabilityCODE
+      type: object
+      properties:
+        maritimeAgentCnpj:
+          type: string
+          description: cnjp number of maritime agency
+        responsabilityCODE:
+          type: string
+          description: 000 code means all responsability
+    MaritimeAgentCallBack:
+      required:
+      - callBackURL
+      - rangeDateISO
+      - startDateISO
+      type: object
+      properties:
+        callBackURL:
+          type: string
+          description: Url path by which PCS should send the trip data update set
+        startDateISO:
+          type: string
+          description: Start date of receiving the update data set.
+        rangeDateISO:
+          type: string
+          description: The period for which the roster information is sent to the
+            requester.
+    VoyageGeneralStatus:
+      required:
+      - carrierServiceCode
+      - facilityCode
+      - facilityTypeCode
+      - vesselIMOnumber
+      - vesselName
+      type: object
+      properties:
+        carrierServiceCode:
+          type: string
+          description: The code of the service to which the schedule details are published.
+        vesselIMOnumber:
+          type: string
+          description: The identifier of the vessel for which schedule details are
+            published.
+        vesselName:
+          type: string
+          description: The name of the vessel identified by the IMO number.
+        carrierVoyageNumber:
+          type: string
+          description: The ship operator has assigned a voyage number to the respective
+            voyage.
+        UNLocationCode:
+          type: string
+          description: The UN location code identifies a location towards a city
+        UNLocationName:
+          type: string
+          description: The name UN location idenified at UNLocationCode
+        transportCallNumber:
+          type: integer
+          description: The field contains the sequence of calls for installations
+            within the port.
+        facilityTypeCode:
+          type: string
+          description: The four-character DCSA code to identify the facility type.
+        facilityCode:
+          type: string
+          description: The code used to identify the specific port terminal being
+            called. A default value of 'other facility' is used if a code has not
+            been assigned to a facility. SMDG reference codes are used for this attribute.
+        otherFacility:
+          type: string
+          description: Alternative way to capture installation details when no standardized
+            DCSA installation code can be found.

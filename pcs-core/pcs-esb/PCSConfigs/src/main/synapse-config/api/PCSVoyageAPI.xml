@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/api/voyage" name="PCSVoyageAPI" version="0.0.1" version-type="url" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST" url-mapping="/voyage-creation">
+        <inSequence>
+            <!--This is generated API skeleton.-->
+            <!--Business Logic Goes Here-->
+            <call>
+                <endpoint>
+                    <http method="post" uri-template="http://pcs-esb-backend-test-its-service:80/api/voyage">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <property expression="json-eval($.receiptID)" name="receipt_id" scope="default" type="INTEGER"/>
+            <payloadFactory media-type="json" template-type="freemarker">
+                <format><![CDATA[{
+  "voyage_id": ${ctx.receipt_id},
+  "subscriptionID": "string",
+  "vesselOperatorCarrierCode": "string",
+  "vesselOperatorCarrierCodeListProvider": "string",
+  "vesselPartnerCarrierCode": "string",
+  "vesselPartnerCarrierCodeListProvider": "string",
+  "startDate": "string",
+  "rangeDate": "string",
+  "voyageGeneralStatus": {
+    "carrierServiceCode": "string",
+    "vesselIMOnumber": "string",
+    "vesselName": "string",
+    "carrierVoyageNumber": "string",
+    "UNLocationCode": "string",
+    "UNLocationName": "string",
+    "transportCallNumber": "string",
+    "facilityTypeCode": "string",
+    "facilityCode": "string",
+    "otherFacility": "string"
+  }
+}]]></format>
+                <args/>
+            </payloadFactory>
+            <call>
+                <endpoint>
+                    <http method="post" uri-template="http://pcs-esb-backend-test-its-service:80/api/voyage/vessel-operator-response">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <loopback/>
+        </inSequence>
+        <outSequence>
+            <payloadFactory media-type="json" template-type="freemarker">
+                <format><![CDATA[{
+  "receiptID": ${ctx.receipt_id}
+}]]></format>
+                <args/>
+            </payloadFactory>
+            <respond/>
+        </outSequence>
+        <faultSequence/>
+    </resource>
+    <resource methods="POST" url-mapping="/voyage-acceptance">
+        <inSequence>
+            <!--This is generated API skeleton.-->
+            <!--Business Logic Goes Here-->
+            <call>
+                <endpoint>
+                    <http method="post" uri-template="http://pcs-esb-backend-test-its-service:80/api/voyage/acceptance">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <loopback/>
+        </inSequence>
+        <outSequence>
+            <respond/>
+        </outSequence>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/voyage/status/{receiptID}">
+        <inSequence>
+            <!--This is generated API skeleton.-->
+            <call>
+                <endpoint>
+                    <http method="get" uri-template="http://pcs-esb-backend-test-its-service:80/api/voyage/{uri.var.receiptID}/status">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <loopback/>
+        </inSequence>
+        <outSequence>
+            <respond/>
+        </outSequence>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/voyage/{voyageID}">
+        <inSequence>
+            <!--This is generated API skeleton.-->
+            <call>
+                <endpoint>
+                    <http method="get" uri-template="http://pcs-esb-backend-test-its-service:80/api/voyage/{uri.var.voyageID}">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <loopback/>
+        </inSequence>
+        <outSequence>
+            <respond/>
+        </outSequence>
+        <faultSequence/>
+    </resource>
+    <resource methods="DELETE" uri-template="/voyage/{voyageID}">
+        <inSequence>
+            <!--This is generated API skeleton.-->
+            <call>
+                <endpoint>
+                    <http method="delete" uri-template="http://pcs-esb-backend-test-its-service:80/api/voyage/{uri.var.voyageID}">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <loopback/>
+        </inSequence>
+        <outSequence>
+            <respond/>
+        </outSequence>
+        <faultSequence/>
+    </resource>
+    <resource methods="PATCH" uri-template="/voyage/{voyageID}">
+        <inSequence>
+            <!--This is generated API skeleton.-->
+            <call>
+                <endpoint>
+                    <http method="patch" uri-template="http://pcs-esb-backend-test-its-service:80/api/voyage/{uri.var.voyageID}">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <loopback/>
+        </inSequence>
+        <outSequence>
+            <respond/>
+        </outSequence>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" url-mapping="/voyages">
+        <inSequence>
+            <!--This is generated API skeleton.-->
+            <!--Business Logic Goes Here-->
+            <call>
+                <endpoint>
+                    <http method="get" uri-template="http://pcs-esb-backend-test-its-service:80/api/voyage">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <loopback/>
+        </inSequence>
+        <outSequence>
+            <respond/>
+        </outSequence>
+        <faultSequence/>
+    </resource>
+    <resource methods="PATCH" uri-template="/voyage-acceptance/{IDMethod}/{ID}">
+        <inSequence>
+            <call>
+                <endpoint>
+                    <http method="patch" uri-template="http://pcs-esb-backend-test-its-service:80/api/voyage/{uri.var.ID}/acceptance">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <loopback/>
+        </inSequence>
+        <outSequence>
+            <respond/>
+        </outSequence>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" url-mapping="/voyages-acceptance">
+        <inSequence>
+            <call>
+                <endpoint>
+                    <http method="get" uri-template="http://pcs-esb-backend-test-its-service:80/api/voyage/acceptance">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <loopback/>
+        </inSequence>
+        <outSequence>
+            <respond/>
+        </outSequence>
+        <faultSequence/>
+    </resource>
+</api>

@@ -1,0 +1,10 @@
+---
+key: "PCSVoyageAPI-0.0.1"
+name : "PCSVoyageAPI"
+displayName : "PCSVoyageAPI"
+description: "Sample API"
+version: "0.0.1"
+serviceUrl: "http://{MI_HOST}:{MI_PORT}/api/voyage/0.0.1"
+definitionType: "OAS3"
+securityType: "BASIC"
+mutualSSLEnabled: false

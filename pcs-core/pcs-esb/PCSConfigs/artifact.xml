@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><artifacts>
+    <artifact name="PCSVoyageAPI" groupId="br.org.its.api" version="0.0.1" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/PCSVoyageAPI.xml</file>
+    </artifact>
+    <artifact name="PCSVoyageAPI_swagger" groupId="br.org.its.metadata" version="0.0.1" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/PCSVoyageAPI_swagger.yaml</file>
+    </artifact>
+    <artifact name="PCSVoyageAPI_metadata" groupId="br.org.its.metadata" version="0.0.1" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/PCSVoyageAPI_metadata.yaml</file>
+    </artifact>
+</artifacts>
